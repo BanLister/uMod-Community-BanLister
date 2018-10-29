@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Oxide.Core.Libraries.Covalence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,10 @@ using System.Linq;
 namespace Oxide.Plugins
 {
     [Info("Ban Lister", "Slut", "1.0.0")]
-    class BanLister : RustPlugin
+    class BanLister : CovalencePlugin
     {
         public static BanLister Instance;
-        const string BaseGetUrl = "http://api.banlister.com/retrieve.php?steamid=";
+        const string BaseGetUrl = "http://api.banlister.com/retrieve.php?i=1&api_key={0}&steamid={1}";
         const string BasePostUrl = "http://api.banlister.com/insert_rust.php";
         const string AdminPermission = "banlister.admin";
 
@@ -80,14 +81,14 @@ namespace Oxide.Plugins
         {
             Instance = this;
             permission.RegisterPermission(AdminPermission, this);
-            foreach (var player in BasePlayer.activePlayerList)
+            foreach (var player in covalence.Players.Connected)
             {
-                OnPlayerInit(player);
+                OnUserConnected(player);
             }
         }
-        private void OnPlayerInit(BasePlayer player)
+        private void OnUserConnected(IPlayer player)
         {
-            webrequest.Enqueue(GetUrl(player.UserIDString), null, (code, response) =>
+            webrequest.Enqueue(GetUrl(player.Id), null, (code, response) =>
             {
                 if (code == 200)
                 {
@@ -98,13 +99,13 @@ namespace Oxide.Plugins
                         BanData.Get[] pastmonth = list.Where(x => (DateTime.Now - x.TimeStamp).Days <= 31).ToArray();
                         if (list.Length >= config.MaxBans && config.KickOnMaxBans)
                         {
-                            player.Kick(GetLang("BanReason", player.displayName));
+                            player.Kick(GetLang("BanReason", player.Name));
                         }
                         if (pastmonth.Any())
                         {
-                            foreach (BasePlayer admin in BasePlayer.activePlayerList.Where(x => permission.UserHasPermission(x.UserIDString, AdminPermission)))
+                            foreach (IPlayer admin in covalence.Players.Connected.Where(x => player.HasPermission(AdminPermission)))
                             {
-                                SendMessage(admin, "AdminMessage", player.displayName, pastmonth.Length);
+                                SendMessage(admin, "AdminMessage", player.Name, pastmonth.Length);
                             }
                         }
                     }
@@ -133,10 +134,7 @@ namespace Oxide.Plugins
                 }
             }, this, Core.Libraries.RequestMethod.POST);
         }
-        private string GetUrl(string steamid)
-        {
-            return string.Concat(BaseGetUrl, steamid);
-        }
+        private string GetUrl(string steamid) => string.Format(BaseGetUrl, config.Key, steamid);
         private string GetLang(string key, params object[] args)
         {
             if (args.Length > 0)
@@ -148,15 +146,15 @@ namespace Oxide.Plugins
                 return lang.GetMessage(key, this);
             }
         }
-        private void SendMessage(BasePlayer player, string key, params object[] args)
+        private void SendMessage(IPlayer player, string key, params object[] args)
         {
             if (args.Length > 0)
             {
-                SendReply(player, string.Format(lang.GetMessage(key, this, player.UserIDString), args));
+                player.Reply(string.Format(lang.GetMessage(key, this, player.Id), args));
             }
             else
             {
-                SendReply(player, lang.GetMessage(key, this, player.UserIDString));
+                player.Reply(lang.GetMessage(key, this, player.Id));
             }
         }
     }
