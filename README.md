@@ -12,7 +12,7 @@ If your looking to get a Community Key, visit [Ban Lister](https://BanLister.com
 
 ### Installation
 
-Download the ZIP file and extract ```Rust-BanLister.cs``` addon to the addons folder.
+Download the ZIP file and extract ```BanLister.cs``` addon to the addons folder.
 
 ### Configuration
 
