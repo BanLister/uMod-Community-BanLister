@@ -12,11 +12,11 @@ If your looking to get a Community Key, visit [Ban Lister](https://BanLister.com
 
 ### Installation
 
-Download the ZIP file and extract ```BanLister.cs``` addon to the addons folder.
+Download the ZIP file and extract ```BanListerPartner.cs``` addon to the addons folder.
 
 ### Configuration
 
-Open ```BanLister.json``` from the Oxide Config directory and modify the following fields as follows.
+Open ```BanListerPartner.json``` from the Oxide Config directory and modify the following fields as follows.
 ```
 "API Key": "", -- Provided BanLister Community Key
 "Ban Threshold": 15, -- If the user has equal to or more recorded bans then this value, then the user will be kicked from the server.
