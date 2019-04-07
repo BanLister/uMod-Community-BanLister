@@ -76,7 +76,7 @@ namespace Oxide.Plugins
             {
                 ["BanReason"] = "Sorry {0}, but this server is protected by Ban Lister, ensuring a safe community!",
                 ["AdminMessage"] = "[Ban Lister] <color=#ff4c4c>{0}</color> <color=silver>has <color=lime>{1}</color> bans in the past month!</color>",
-                ["BanLogged"] = "Succesfully logged ban!",
+                ["BanLogged"] = "Successfully logged ban!",
                 ["BanNotLogged"] = "Failed to log ban! {0}"
             }, this);
         }
