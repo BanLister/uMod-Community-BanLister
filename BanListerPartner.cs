@@ -13,7 +13,7 @@ namespace Oxide.Plugins
         public static BanListerPartner Instance;
         private const string BaseGetUrl = "http://api.banlister.com/retrieve.php?i=1&api_key={0}&steamid={1}";
         private const string BasePostUrl = "http://api.banlister.com/insert_rust.php";
-        private const string AdminPermission = "banlister.admin";
+        private const string AdminPermission = "banlisterpartner.admin";
 
         private class BanData
         {
@@ -74,7 +74,7 @@ namespace Oxide.Plugins
         {
             lang.RegisterMessages(new Dictionary<string, string>
             {
-                ["BanReason"] = "Sorry {0}, but this server is protected by Ban Lister, ensuring a safe community!",
+                ["BanReason"] = "Sorry {0}, but this server is protected by BanLister.com, ensuring a safer community!",
                 ["AdminMessage"] = "[Ban Lister] <color=#ff4c4c>{0}</color> <color=silver>has <color=lime>{1}</color> bans in the past month!</color>",
                 ["BanLogged"] = "Successfully logged ban!",
                 ["BanNotLogged"] = "Failed to log ban! {0}"
